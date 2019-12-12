@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 15;
+    public float moveSpeed;
+    public float jumpForce;
     private Rigidbody2D rb;
 
     private void Start()
@@ -12,11 +13,16 @@ public class PlayerController : MonoBehaviour
 
         if (moveSpeed <= 0)
         {
-            moveSpeed = 15;
+            moveSpeed = 400;
+        }
+
+        if (jumpForce <= 0)
+        {
+            jumpForce = 400;
         }
     }
 
-    void Update()
+    private void FixedUpdate()
     {
         Movement();
     }
@@ -31,12 +37,17 @@ public class PlayerController : MonoBehaviour
 
         if (Math.Abs(horizontalMove) > EPSILON)
         {
-            rb.velocity = new Vector2(horizontalMove * moveSpeed, rb.velocity.y);
+            rb.velocity = new Vector2(horizontalMove * moveSpeed * Time.deltaTime, rb.velocity.y);
         }
 
         if ((Math.Abs(faceDirection) > EPSILON))
         {
             transform.localScale = new Vector3(faceDirection, 1, 1);
+        }
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.deltaTime);
         }
     }
 }
