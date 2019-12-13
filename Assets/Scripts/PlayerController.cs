@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     private Collider2D coll;
+    private bool isHurt;
 
     private bool IsIdle
     {
@@ -38,6 +39,12 @@ public class PlayerController : MonoBehaviour
         get => anim.GetBool("falling");
     }
 
+    private bool IsHurt
+    {
+        set => anim.SetBool("hurt", value);
+        get => anim.GetBool("hurt");
+    }
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -57,7 +64,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Movement();
+        if (!isHurt)
+        {
+            Movement();
+        }
+
         SwitchAnim();
     }
 
@@ -80,32 +91,44 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(faceDirection, 1, 1);
         }
 
-        this.Running = Math.Abs(faceDirection);
+        Running = Math.Abs(faceDirection);
 
         // Jump
         if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(ground))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.deltaTime);
-            this.IsJumping = true;
+            IsJumping = true;
         }
     }
 
     private void SwitchAnim()
     {
-        this.IsIdle = false;
+        IsIdle = false;
 
-        if (this.IsJumping)
+        if (IsJumping)
         {
             if (rb.velocity.y < 0)
             {
-                this.IsJumping = false;
-                this.IsFalling = true;
+                IsJumping = false;
+                IsFalling = true;
+            }
+        }
+        else if (isHurt)
+        {
+            IsHurt = true;
+            Running = 0.0f;
+
+            if (Math.Abs(rb.velocity.x) < 0.1f)
+            {
+                IsHurt = false;
+                isHurt = false;
+                IsIdle = true;
             }
         }
         else if (coll.IsTouchingLayers(ground))
         {
-            this.IsFalling = false;
-            this.IsIdle = true;
+            IsFalling = false;
+            IsIdle = true;
         }
     }
 
@@ -125,11 +148,21 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            if (this.IsFalling)
+            if (IsFalling)
             {
                 Destroy(collision.gameObject);
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.deltaTime);
-                this.IsJumping = true;
+                IsJumping = true;
+            }
+            else if (transform.position.x < collision.gameObject.transform.position.x)
+            {
+                rb.velocity = new Vector2(-10, rb.velocity.y);
+                isHurt = true;
+            }
+            else if (transform.position.x > collision.gameObject.transform.position.x)
+            {
+                rb.velocity = new Vector2(10, rb.velocity.y);
+                isHurt = true;
             }
         }
     }
