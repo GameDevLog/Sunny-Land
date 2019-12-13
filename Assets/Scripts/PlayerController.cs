@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
             if (rb.velocity.y < 0)
             {
                 this.IsJumping = false;
-                this.IsFalling = true; 
+                this.IsFalling = true;
             }
         }
         else if (coll.IsTouchingLayers(ground))
@@ -123,11 +123,13 @@ public class PlayerController : MonoBehaviour
     // Enemy
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (this.IsFalling)
+        if (collision.gameObject.tag == "Enemy")
         {
-            if (collision.gameObject.tag == "Enemy")
+            if (this.IsFalling)
             {
                 Destroy(collision.gameObject);
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.deltaTime);
+                this.IsJumping = true;
             }
         }
     }
