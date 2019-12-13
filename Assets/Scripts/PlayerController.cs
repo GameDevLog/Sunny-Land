@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
         this.Running = Math.Abs(faceDirection);
 
         // Jump
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(ground))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.deltaTime);
             this.IsJumping = true;
