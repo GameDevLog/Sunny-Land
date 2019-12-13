@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     public float jumpForce;
     public LayerMask ground;
+    public int cherry;
 
     private Rigidbody2D rb;
     private Animator anim;
@@ -103,6 +104,15 @@ public class PlayerController : MonoBehaviour
         {
             this.IsFalling = false;
             this.IsIdle = true;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Collection")
+        {
+            Destroy(collision.gameObject);
+            cherry++;
         }
     }
 }
