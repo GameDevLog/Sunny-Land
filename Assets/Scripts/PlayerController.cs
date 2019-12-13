@@ -105,6 +105,11 @@ public class PlayerController : MonoBehaviour
     {
         IsIdle = false;
 
+        if (rb.velocity.y < 0.1f && !coll.IsTouchingLayers(ground))
+        {
+            IsFalling = true;
+        }
+
         if (IsJumping)
         {
             if (rb.velocity.y < 0)
