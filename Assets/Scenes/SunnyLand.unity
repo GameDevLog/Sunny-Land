@@ -2858,7 +2858,7 @@ PrefabInstance:
     - target: {fileID: 6104118748068107120, guid: f431370f87d894a55a7be6dd90acd868,
         type: 3}
       propertyPath: m_Radius
-      value: 0.4
+      value: 0.39
       objectReference: {fileID: 0}
     - target: {fileID: 6104118748068107122, guid: f431370f87d894a55a7be6dd90acd868,
         type: 3}
@@ -2919,6 +2919,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6104118748068107125, guid: f431370f87d894a55a7be6dd90acd868,
+        type: 3}
+      propertyPath: m_GravityScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6104118748068107126, guid: f431370f87d894a55a7be6dd90acd868,
         type: 3}

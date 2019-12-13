@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class EnemyFrog : MonoBehaviour
+public class EnemyFrog : Enemy
 {
     public Transform leftPoint;
     public Transform rightPoint;
@@ -13,7 +13,6 @@ public class EnemyFrog : MonoBehaviour
 
     private Rigidbody2D rb;
     private Collider2D coll;
-    private Animator anim;
     private bool faceLeft = true;
     private float leftX;
     private float rightX;
@@ -29,22 +28,12 @@ public class EnemyFrog : MonoBehaviour
         set => anim.SetBool("falling", value);
         get => anim.GetBool("falling");
     }
-    
-    public void JumpOn()
-    {
-        anim.SetTrigger("death");
-    }
 
-    public void Death()
+    protected override void Start()
     {
-        Destroy(gameObject);
-    }
-
-    void Start()
-    {
+        base.Start();
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<Collider2D>();
-        anim = GetComponent<Animator>();
 
         transform.DetachChildren();
         leftX = leftPoint.position.x;

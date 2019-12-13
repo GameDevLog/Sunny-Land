@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EnemyEagle : MonoBehaviour
+public class EnemyEagle : Enemy
 {
     public Transform topPoint;
     public Transform bottomPoint;
@@ -12,8 +12,9 @@ public class EnemyEagle : MonoBehaviour
     private float topY;
     private float bottomY;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<Collider2D>();
 

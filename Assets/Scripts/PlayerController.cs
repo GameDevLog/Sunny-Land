@@ -155,8 +155,8 @@ public class PlayerController : MonoBehaviour
         {
             if (IsFalling)
             {
-                EnemyFrog frog = collision.gameObject.GetComponent<EnemyFrog>();
-                frog.JumpOn();
+                Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+                enemy.JumpOn();
                 
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.deltaTime);
                 IsJumping = true;
