@@ -5,29 +5,31 @@ public class PlayerController : MonoBehaviour
 {
     public float moveSpeed;
     public float jumpForce;
+    public LayerMask ground;
 
     private Rigidbody2D rb;
     private Animator anim;
+    private Collider2D coll;
 
-    private Boolean IsIdle
+    private bool IsIdle
     {
         set => anim.SetBool("idle", value);
         get => anim.GetBool("idle");
     }
 
-    private Boolean IsRunning
+    private float Running
     {
-        set => anim.SetBool("running", value);
-        get => anim.GetBool("running");
+        set => anim.SetFloat("running", value);
+        get => anim.GetFloat("running");
     }
 
-    private Boolean IsJumping
+    private bool IsJumping
     {
         set => anim.SetBool("jumping", value);
         get => anim.GetBool("jumping");
     }
 
-    private Boolean IsFalling
+    private bool IsFalling
     {
         set => anim.SetBool("falling", value);
         get => anim.GetBool("falling");
@@ -37,6 +39,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        coll = GetComponent<Collider2D>();
 
         if (moveSpeed <= 0)
         {
@@ -72,8 +75,9 @@ public class PlayerController : MonoBehaviour
         if ((Math.Abs(faceDirection) > EPSILON))
         {
             transform.localScale = new Vector3(faceDirection, 1, 1);
-            this.IsRunning = true;
         }
+
+        this.Running = Math.Abs(faceDirection);
 
         // Jump
         if (Input.GetButtonDown("Jump"))
@@ -85,6 +89,8 @@ public class PlayerController : MonoBehaviour
 
     private void SwitchAnim()
     {
+        this.IsIdle = false;
+
         if (this.IsJumping)
         {
             if (rb.velocity.y < 0)
@@ -92,6 +98,11 @@ public class PlayerController : MonoBehaviour
                 this.IsJumping = false;
                 this.IsFalling = true; 
             }
+        }
+        else if (coll.IsTouchingLayers(ground))
+        {
+            this.IsFalling = false;
+            this.IsIdle = true;
         }
     }
 }
