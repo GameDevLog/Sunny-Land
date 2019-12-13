@@ -9,6 +9,30 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
 
+    private Boolean IsIdle
+    {
+        set => anim.SetBool("idle", value);
+        get => anim.GetBool("idle");
+    }
+
+    private Boolean IsRunning
+    {
+        set => anim.SetBool("running", value);
+        get => anim.GetBool("running");
+    }
+
+    private Boolean IsJumping
+    {
+        set => anim.SetBool("jumping", value);
+        get => anim.GetBool("jumping");
+    }
+
+    private Boolean IsFalling
+    {
+        set => anim.SetBool("falling", value);
+        get => anim.GetBool("falling");
+    }
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -28,6 +52,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         Movement();
+        SwitchAnim();
     }
 
     private void Movement()
@@ -47,13 +72,26 @@ public class PlayerController : MonoBehaviour
         if ((Math.Abs(faceDirection) > EPSILON))
         {
             transform.localScale = new Vector3(faceDirection, 1, 1);
-            anim.SetFloat("running", Math.Abs(faceDirection));
+            this.IsRunning = true;
         }
 
         // Jump
         if (Input.GetButtonDown("Jump"))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.deltaTime);
+            this.IsJumping = true;
+        }
+    }
+
+    private void SwitchAnim()
+    {
+        if (this.IsJumping)
+        {
+            if (rb.velocity.y < 0)
+            {
+                this.IsJumping = false;
+                this.IsFalling = true; 
+            }
         }
     }
 }
