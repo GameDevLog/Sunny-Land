@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public float jumpForce;
     public LayerMask ground;
     public int cherry;
+    public Text cherryNum;
 
     private Rigidbody2D rb;
     private Animator anim;
@@ -107,12 +109,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Collection
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Collection")
         {
             Destroy(collision.gameObject);
             cherry++;
+            cherryNum.text = cherry.ToString();
+        }
+    }
+
+    // Enemy
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (this.IsFalling)
+        {
+            if (collision.gameObject.tag == "Enemy")
+            {
+                Destroy(collision.gameObject);
+            }
         }
     }
 }
